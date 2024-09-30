@@ -81,7 +81,7 @@ def show_game_info(event):
 
 root = tk.Tk()
 root.title("Gerador de Crachás")
-root.iconbitmap("icone_cracha.ico")
+root.iconbitmap("C:/Users/Estudo e Projetoss/Desktop/CRACHÁS/icone_cracha.ico")
 root.geometry("400x370") 
 
 label_nome = tk.Label(root, text="Nome:", font=("Arial", 14)) 
