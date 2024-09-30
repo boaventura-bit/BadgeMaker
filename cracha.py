@@ -61,13 +61,28 @@ def gerar_cracha():
     criar_cracha(nome, validade, caminho_qr, caminho_cracha)
     messagebox.showinfo("Sucesso", f"Crachá gerado com sucesso: {caminho_cracha}")
 
+def show_game_info(event):
+    license_text = (
+        "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License\n\n"
+        "Copyright (c) 2024 Carlos Boaventura\n\n"
+        "Você é livre para: compartilhar — copiar e redistribuir o material em qualquer meio ou formato.\n\n"
+        "Sob as seguintes condições:\n"
+        "Atribuição — Você deve dar o devido crédito, fornecer um link para a licença e indicar se foram feitas alterações.\n"
+        "Não Comercial — Você não pode usar o material para fins comerciais.\n"
+        "Sem Derivações — Você não pode remixar, transformar ou criar a partir do material.\n\n"
+        "Você não pode aplicar legalmente medidas adicionais que restrinjam legalmente outros de fazer qualquer coisa que a licença permita.\n\n"
+        "Para mais informações, visite: https://creativecommons.org/licenses/by-nc-nd/4.0/"
+    )
+
+    messagebox.showinfo("Informações do Software", f"Gerador de Crachás\n"
+                                                "Versão 1.0.1\n"
+                                                "© 2024 Carlos Boaventura\n\n"
+                                                f"{license_text}")
+
 root = tk.Tk()
 root.title("Gerador de Crachás")
-
 root.iconbitmap("icone_cracha.ico")
-
-root.geometry("400x350") 
-
+root.geometry("400x370") 
 
 label_nome = tk.Label(root, text="Nome:", font=("Arial", 14)) 
 label_nome.pack(pady=(10, 5))
@@ -89,5 +104,10 @@ botao_selecionar_qr.pack(pady=(10, 5))
 
 botao_gerar = tk.Button(root, text="Gerar Crachá", command=gerar_cracha, font=("Arial", 12), bg="#2196F3", fg="white")
 botao_gerar.pack(pady=(10, 10))
+
+
+label_copyright = tk.Label(root, text="Copyright (c) 2024 Carlos Boaventura", font=("Arial", 10), fg="blue", cursor="hand2")
+label_copyright.pack(side=tk.BOTTOM, pady=(10, 5))
+label_copyright.bind("<Button-1>", show_game_info)
 
 root.mainloop()
