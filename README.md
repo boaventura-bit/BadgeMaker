@@ -2,7 +2,7 @@
 
 Este é um projeto simples de **Gerador de Crachás** implementado em Python, utilizando as bibliotecas Pillow para manipulação de imagens, Tkinter para a interface gráfica e tkcalendar para seleção de datas. O objetivo do programa é permitir que os usuários gerem um crachá personalizado com nome, validade e um código QR.
 
-## Como Usar 🎮
+## Como Usar 🖥️
 
 1. **Preencha os Campos**:
    - Nome: Insira o nome da pessoa.
