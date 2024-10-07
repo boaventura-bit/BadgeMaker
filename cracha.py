@@ -4,32 +4,46 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from tkcalendar import DateEntry
 
+def ajustar_tamanho_fonte(draw, texto, largura_maxima, fonte_inicial):
+    fonte = fonte_inicial
+    while True:
+        largura_texto = draw.textbbox((0, 0), texto, font=fonte)[2]
+        if largura_texto <= largura_maxima:
+            break
+        novo_tamanho = fonte.size - 1
+        fonte = ImageFont.truetype("arial.ttf", novo_tamanho)
+    return fonte
+
 def criar_cracha(nome, validade, caminho_qr, caminho_cracha):
-    largura = int(9 * 37.795) 
-    altura = int(5 * 37.795)  
+    largura = int(5 * 37.795)
+    altura = int(9 * 37.795)
 
     cracha = Image.new('RGB', (largura, altura), color='white')
     draw = ImageDraw.Draw(cracha)
 
     try:
-        fonte = ImageFont.truetype("arial.ttf", 24)
+        fonte_inicial = ImageFont.truetype("arial.ttf", 24)
     except IOError:
-        fonte = ImageFont.load_default()
+        fonte_inicial = ImageFont.load_default()
 
-    texto_nome = nome
-    
-    texto_bbox = draw.textbbox((0, 0), texto_nome, font=fonte)
+    nome_fonte = ajustar_tamanho_fonte(draw, nome, largura - 20, fonte_inicial)
+    texto_bbox = draw.textbbox((0, 0), nome, font=nome_fonte)
     texto_largura = texto_bbox[2] - texto_bbox[0]
-    draw.text(((largura - texto_largura) / 2, 10), texto_nome, fill="black", font=fonte)
-
+    
     validade_texto = f"Válido até: {validade}"
-    validade_bbox = draw.textbbox((0, 0), validade_texto, font=fonte)
-    validade_largura = validade_bbox[2] - validade_bbox[0] 
-    draw.text(((largura - validade_largura) / 2, 40), validade_texto, fill="black", font=fonte)
+    validade_fonte = ajustar_tamanho_fonte(draw, validade_texto, largura - 20, fonte_inicial)
+    validade_bbox = draw.textbbox((0, 0), validade_texto, font=validade_fonte)
+    validade_largura = validade_bbox[2] - validade_bbox[0]
 
     qr_img = Image.open(caminho_qr).convert("RGBA")
-    qr_img = qr_img.resize((100, 100))
-    cracha.paste(qr_img, ((largura - 100) // 2, 70), qr_img) 
+    qr_img = qr_img.resize((110, 110))
+
+    altura_total_texto_qr = texto_bbox[3] + 20 + validade_bbox[3] + 20 + 110
+    posicao_base = (altura - altura_total_texto_qr) // 2
+
+    draw.text(((largura - texto_largura) / 2, posicao_base), nome, fill="black", font=nome_fonte)
+    draw.text(((largura - validade_largura) / 2, posicao_base + texto_bbox[3] + 20), validade_texto, fill="black", font=validade_fonte)
+    cracha.paste(qr_img, ((largura - 110) // 2, posicao_base + texto_bbox[3] + 20 + validade_bbox[3] + 20), qr_img)
 
     cracha.save(caminho_cracha)
 
@@ -43,7 +57,7 @@ def gerar_cracha():
     validade = entry_validade.get()
     caminho_qr = entry_qr_code.get() 
 
-    if not nome or not validade or not caminho_qr:
+    if not (nome and validade and caminho_qr):
         messagebox.showwarning("Entrada inválida", "Por favor, preencha todos os campos.")
         return
 
@@ -51,9 +65,9 @@ def gerar_cracha():
     nome_arquivo = f"{nome.replace(' ', '_')}_{ano_atual}.png" 
 
     caminho_cracha = filedialog.asksaveasfilename(defaultextension=".png",
-                                                    initialfile=nome_arquivo,
-                                                    filetypes=[("PNG files", "*.png")],
-                                                    title="Salvar Crachá como")
+                                                  initialfile=nome_arquivo,
+                                                  filetypes=[("PNG files", "*.png")],
+                                                  title="Salvar Crachá como")
     
     if not caminho_cracha:  
         return
@@ -81,30 +95,37 @@ def show_game_info(event):
 
 root = tk.Tk()
 root.title("Gerador de Crachás")
-root.iconbitmap("C:/Users/Estudo e Projetoss/Desktop/CRACHÁS/icone_cracha.ico")
-root.geometry("400x370") 
+root.geometry("400x390") 
 
-label_nome = tk.Label(root, text="Nome:", font=("Arial", 14)) 
-label_nome.pack(pady=(10, 5))
-entry_nome = tk.Entry(root, font=("Arial", 14), width=30)
-entry_nome.pack(pady=(0, 10))
+# Organiza os elementos à esquerda
+frame = tk.Frame(root)
+frame.pack(padx=10, pady=10, anchor='w')  # Mantém o alinhamento à esquerda
 
-label_validade = tk.Label(root, text="Validade:", font=("Arial", 14)) 
-label_validade.pack(pady=(10, 5))
-entry_validade = DateEntry(root, font=("Arial", 14), width=30, background='darkblue', foreground='white', borderwidth=2, date_pattern='dd/mm/yyyy')
-entry_validade.pack(pady=(0, 10))
+# Nome
+label_nome = tk.Label(frame, text="Nome:", font=("Arial", 14), anchor='w') 
+label_nome.pack(pady=(10, 5), anchor='w')
+entry_nome = tk.Entry(frame, font=("Arial", 14), width=30)
+entry_nome.pack(pady=(0, 10), anchor='w')
 
-label_qr_code = tk.Label(root, text="QR Code:", font=("Arial", 14))
-label_qr_code.pack(pady=(10, 5))
-entry_qr_code = tk.Entry(root, font=("Arial", 14), width=30)
-entry_qr_code.pack(pady=(0, 10))
+# Validade
+label_validade = tk.Label(frame, text="Validade:", font=("Arial", 14), anchor='w') 
+label_validade.pack(pady=(10, 5), anchor='w')
+entry_validade = DateEntry(frame, font=("Arial", 14), width=29, background='darkblue', foreground='white', borderwidth=2, date_pattern='dd/mm/yyyy')
+entry_validade.pack(pady=(0, 10), anchor='w')
 
-botao_selecionar_qr = tk.Button(root, text="Selecionar QR Code", command=selecionar_qr_code, font=("Arial", 12), bg="#4CAF50", fg="white")
-botao_selecionar_qr.pack(pady=(10, 5))
+# QR Code
+label_qr_code = tk.Label(frame, text="QR Code:", font=("Arial", 14), anchor='w')
+label_qr_code.pack(pady=(10, 5), anchor='w')
+entry_qr_code = tk.Entry(frame, font=("Arial", 14), width=30)
+entry_qr_code.pack(pady=(0, 10), anchor='w')
 
-botao_gerar = tk.Button(root, text="Gerar Crachá", command=gerar_cracha, font=("Arial", 12), bg="#2196F3", fg="white")
-botao_gerar.pack(pady=(10, 10))
+# Botão para selecionar QR Code
+botao_selecionar_qr = tk.Button(frame, text="Selecionar QR Code", command=selecionar_qr_code, font=("Arial", 12), bg="#4CAF50", fg="white")
+botao_selecionar_qr.pack(pady=(10, 5), anchor='w')
 
+# Botão Gerar Crachá
+botao_gerar = tk.Button(frame, text="Gerar Crachá", command=gerar_cracha, font=("Arial", 12), bg="#2196F3", fg="white")
+botao_gerar.pack(pady=(10, 10), anchor='w')
 
 label_copyright = tk.Label(root, text="Copyright (c) 2024 Carlos Boaventura", font=("Arial", 10), fg="blue", cursor="hand2")
 label_copyright.pack(side=tk.BOTTOM, pady=(10, 5))

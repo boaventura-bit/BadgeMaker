@@ -76,7 +76,7 @@ Para instalar o projeto, siga os seguintes passos:
 
 ### Instalação do Software 💻
 
-Baixe o instalador do jogo através do seguinte link: [Link para o instalador](https://www.mediafire.com/file/giufp4erg62pvv5/Gerador_de_Crach%25C3%25A1s.exe/file).
+Baixe o instalador do jogo através do seguinte link: [Link para o instalador](https://www.mediafire.com/file/z9rt99l7wwegje9/cracha_installer.exe/file).
 
 ## Como Executar 🚀
 

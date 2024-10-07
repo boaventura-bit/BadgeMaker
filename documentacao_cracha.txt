@@ -1,0 +1,65 @@
+# Documentação do Código para Gerador de Crachás
+
+## Descrição do Projeto
+Este projeto foi pensado para facilitar a criação de crachás simples para o administrativo da empresa Terrabel Empreendimentos LTDA. 
+
+## Bibliotecas Utilizadas
+- **PIL (Pillow)**: Para manipulação de imagens.
+- **tkinter**: Para a interface gráfica.
+- **tkcalendar**: Para o componente de seleção de datas.
+- **datetime**: Para manipulação de datas.
+
+## Funções Principais
+
+### 1. `ajustar_tamanho_fonte(draw, texto, largura_maxima, fonte_inicial)`
+Ajusta o tamanho da fonte para que o texto caiba dentro da largura máxima especificada.
+
+#### Parâmetros:
+- `draw`: Instância de desenho da imagem.
+- `texto`: Texto a ser desenhado.
+- `largura_maxima`: Largura máxima que o texto pode ocupar.
+- `fonte_inicial`: Fonte a ser utilizada inicialmente.
+
+#### Retorno:
+- Retorna a fonte ajustada.
+
+### 2. `criar_cracha(nome, validade, caminho_qr, caminho_cracha)`
+Cria um crachá com o nome, validade e QR Code especificados.
+
+#### Parâmetros:
+- `nome`: Nome a ser exibido no crachá.
+- `validade`: Data de validade do crachá.
+- `caminho_qr`: Caminho da imagem do QR Code.
+- `caminho_cracha`: Caminho onde o crachá gerado será salvo.
+
+### 3. `selecionar_qr_code()`
+Abre um diálogo para selecionar a imagem do QR Code e insere o caminho no campo correspondente.
+
+### 4. `gerar_cracha()`
+Verifica se os campos foram preenchidos e chama a função `criar_cracha` para gerar o crachá.
+
+### 5. `show_game_info(event)`
+Exibe informações sobre o software, incluindo a licença e direitos autorais.
+
+## Interface Gráfica
+A interface gráfica é composta por:
+- Campos de entrada para nome, validade e QR Code.
+- Botão para selecionar a imagem do QR Code.
+- Botão para gerar o crachá.
+- Informações de copyright na parte inferior da janela.
+
+## Licença
+Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License
+
+Copyright (c) 2024 Carlos Boaventura
+
+Você é livre para: compartilhar — copiar e redistribuir o material em qualquer meio ou formato.
+
+Sob as seguintes condições:
+- Atribuição — Você deve dar o devido crédito, fornecer um link para a licença e indicar se foram feitas alterações.
+- Não Comercial — Você não pode usar o material para fins comerciais.
+- Sem Derivações — Você não pode remixar, transformar ou criar a partir do material.
+
+Você não pode aplicar legalmente medidas adicionais que restrinjam legalmente outros de fazer qualquer coisa que a licença permita.
+
+Para mais informações, visite: https://creativecommons.org/licenses/by-nc-nd/4.0/
